@@ -8,17 +8,47 @@ function Recipe() {
   const [details, setDetails] = useState({});
   const [activeTab, setActiveTab] = useState("instructions");
 
-  const fetchDetails = async () => {
-    const data = await fetch(
-      `https://api.spoonacular.com/recipes/${params.name}/information/?apiKey=${process.env.REACT_APP_API_KEY}`
-    );
-    const detailData = await data.json();
-    setDetails(detailData);
-  };
+  // const fetchDetails = async () => {
+  //   const data = await fetch(
+  //     `https://api.spoonacular.com/recipes/${params.name}/information/?apiKey=${process.env.REACT_APP_API_KEY}`
+  //   );
+  //   const detailData = await data.json();
+  //   setDetails(detailData);
+  // };
+
+  // useEffect(()=>{
+  //   fetchDetails();
+  // }, [params.name]);
+
+
+
+  // useEffect(() => {
+  //   const fetchDetails = async () => {
+  //     const data = await fetch(
+  //       `https://api.spoonacular.com/recipes/${params.name}/information/?apiKey=${process.env.REACT_APP_API_KEY}`
+  //     );
+  //     const detailData = await data.json();
+  //     setDetails(detailData);
+  //   };
+  //   fetchDetails();
+  // }, [params.name]);
+
+
 
   useEffect(() => {
-    fetchDetails();
+    setDetails({});
+    if (params.name) {
+      const fetchDetails = async () => {
+        const data = await fetch(
+          `https://api.spoonacular.com/recipes/${params.name}/information/?apiKey=${process.env.REACT_APP_API_KEY}`
+        );
+        const detailData = await data.json();
+        setDetails(detailData);
+      };
+      fetchDetails();
+    }
   }, [params.name]);
+
 
   return (
     <DetailWrapper>
@@ -28,13 +58,13 @@ function Recipe() {
       </div>
       <Info>
         <Button
-          className={activeTab === "instructions" ? "active" : ""}
+          className={activeTab === 'instructions' ? 'active' : ''}
           onClick={() => setActiveTab("instructions")}
         >
           Instructions
         </Button>
         <Button
-          className={activeTab === "ingredients" ? "active" : ""}
+          className={activeTab === 'ingredients' ? 'active' : ''}
           onClick={() => setActiveTab("ingredients")}
         >
           Ingredients
@@ -45,14 +75,13 @@ function Recipe() {
             <h3 dangerouslySetInnerHTML={{ __html: details.instructions }}></h3>
           </div>
         )}
-        {activeTab === "ingredients" &&(
-            <ul>
-            {details.extendedIngredients.map((ingredient) => (
-              <li key={ingredient.id}>{ingredient.original}</li>
+        {activeTab === "ingredients" && (
+          <ul>
+            {details.extendedIngredients.map((ingredient, index) => (
+              <li key={index}>{ingredient.original}</li>
             ))}
           </ul>
         )}
-      
       </Info>
     </DetailWrapper>
   );

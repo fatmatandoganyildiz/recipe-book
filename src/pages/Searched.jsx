@@ -22,7 +22,7 @@ function Searched() {
 
   return (
     <Grid>
-      {searchedRecipes?.map((item) => {
+      {searchedRecipes.map((item) => {
         return (
           <Card key={item.id}>
             <Link to={"/recipe/" + item.id}>
